@@ -67,7 +67,7 @@ jobs:
           context: ./app/backend
           platforms: linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-backend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-backend:${{ github.sha }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
@@ -75,4 +75,4 @@ jobs:
           context: ./app/frontend
           platforms: linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-frontend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-frontend:${{ github.sha }}
