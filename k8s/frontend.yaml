@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: dockerayush13/stockmarket-frontend:latest
+          image: dockerayush13/stockmarket-frontend:1672c6ddae689466aee24e3b46b9d17cd03993e8
           ports:
             - containerPort: 80
 ---

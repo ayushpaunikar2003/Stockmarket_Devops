@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: dockerayush13/stockmarket-backend:latest
+          image: dockerayush13/stockmarket-backend:1672c6ddae689466aee24e3b46b9d17cd03993e8
           ports:
             - containerPort: 5000
           env:
