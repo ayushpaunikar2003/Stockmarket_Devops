@@ -1,0 +1,6 @@
+apiVersion: v2
+name: stockmarket
+description: Helm chart for the Stock Market application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

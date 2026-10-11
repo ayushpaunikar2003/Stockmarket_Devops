@@ -1,0 +1,39 @@
+# Helm values for Stockmarket application
+
+# Namespace (used by helm install --namespace as well)
+namespace: stockmarket
+
+mongo:
+  name: mongo
+  replicaCount: 1
+  image:
+    repository: mongo
+    tag: "7"
+  service:
+    port: 27017
+  env:
+    MONGO_INITDB_DATABASE: stockmarket
+
+backend:
+  name: backend
+  replicaCount: 2
+  image:
+    repository: dockerayush13/stockmarket-backend
+    tag: "1672c6ddae689466aee24e3b46b9d17cd03993e8"
+  service:
+    port: 5000
+    targetPort: 5000
+  env:
+    MONGO_URI: "mongodb://mongo:27017/stockmarket"
+
+frontend:
+  name: frontend
+  replicaCount: 1
+  image:
+    repository: dockerayush13/stockmarket-frontend
+    tag: "1672c6ddae689466aee24e3b46b9d17cd03993e8"
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 80
+    nodePort: 30080

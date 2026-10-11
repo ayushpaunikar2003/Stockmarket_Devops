@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/ayushpaunikar2003/Stockmarket_Devops.git
     targetRevision: ayush
-    path: k8s
+    path: helm/stockmarket
 
   destination:
     server: https://kubernetes.default.svc

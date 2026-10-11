@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongo.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.mongo.name }}
+spec:
+  replicas: {{ .Values.mongo.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongo.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongo.name }}
+    spec:
+      containers:
+        - name: {{ .Values.mongo.name }}
+          image: {{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}
+          ports:
+            - containerPort: {{ .Values.mongo.service.port }}
+          env:
+            - name: MONGO_INITDB_DATABASE
+              value: {{ .Values.mongo.env.MONGO_INITDB_DATABASE }}
