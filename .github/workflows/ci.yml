@@ -132,22 +132,14 @@ jobs:
 
       # ── Trivy security scan — fail on CRITICAL only (HIGH shown, not blocking) ──
       - name: Trivy scan — backend
-        uses: aquasecurity/trivy-action@v0.29.0
-        with:
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-backend:${{ github.sha }}
-          format: table
-          exit-code: '1'
-          severity: CRITICAL
-          ignore-unfixed: true
+        run: |
+          trivy image --severity CRITICAL --exit-code 1 --ignore-unfixed \
+            ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-backend:${{ github.sha }}
 
       - name: Trivy scan — frontend
-        uses: aquasecurity/trivy-action@v0.29.0
-        with:
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-frontend:${{ github.sha }}
-          format: table
-          exit-code: '1'
-          severity: CRITICAL
-          ignore-unfixed: true
+        run: |
+          trivy image --severity CRITICAL --exit-code 1 --ignore-unfixed \
+            ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-frontend:${{ github.sha }}
 
       # ── Push only on push events to deployment branch (never on pull_request) ──
       - name: Login to Docker Hub
