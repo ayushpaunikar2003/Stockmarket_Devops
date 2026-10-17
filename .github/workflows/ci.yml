@@ -132,7 +132,7 @@ jobs:
 
       # ── Trivy security scan — fail on CRITICAL only (HIGH shown, not blocking) ──
       - name: Trivy scan — backend
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@v0.29.0
         with:
           image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-backend:${{ github.sha }}
           format: table
@@ -141,7 +141,7 @@ jobs:
           ignore-unfixed: true
 
       - name: Trivy scan — frontend
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@v0.29.0
         with:
           image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/stockmarket-frontend:${{ github.sha }}
           format: table
