@@ -80,6 +80,53 @@ services:
     networks:
       - stockmarket-network
 
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    hostname: loki
+    user: "root"
+    restart: unless-stopped
+
+    ports:
+      - "3100:3100"
+
+    volumes:
+      - ../logging/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki-data:/tmp/loki
+
+    command:
+      - "-config.file=/etc/loki/local-config.yaml"
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:3100/ready || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - stockmarket-network
+
+  promtail:
+    image: grafana/promtail:3.0.0
+    container_name: promtail
+    hostname: promtail
+    restart: unless-stopped
+
+    volumes:
+      - ../logging/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    command:
+      - "-config.file=/etc/promtail/config.yml"
+
+    depends_on:
+      - loki
+
+    networks:
+      - stockmarket-network
+
   grafana:
     image: grafana/grafana:12.1.0
     container_name: grafana
@@ -96,10 +143,8 @@ services:
 
     volumes:
       - grafana-data:/var/lib/grafana
-
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
-
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
 
     healthcheck:
@@ -112,18 +157,17 @@ services:
     depends_on:
       prometheus:
         condition: service_started
+      loki:
+        condition: service_started
 
     networks:
       - stockmarket-network
 
 volumes:
   prometheus-data:
-
   grafana-data:
+  loki-data:
 
 networks:
   stockmarket-network:
     external: true
-
-
-      

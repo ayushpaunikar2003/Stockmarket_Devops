@@ -165,18 +165,19 @@ app.use('/api/contact', contactRoutes);
  */
 const PORT = process.env.PORT || 5000;
 
-/**
- * Database Connection
- */
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('MongoDB connected');
+if (require.main === module) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log('MongoDB connected');
 
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
+      app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.error('MongoDB Connection Error:', err);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error('MongoDB Connection Error:', err);
-    process.exit(1);
-  });
+}
+
+module.exports = app;
