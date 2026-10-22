@@ -22,3 +22,21 @@ scrape_configs:
         target_label: 'app'
       - source_labels: ['__meta_docker_container_log_stream']
         target_label: 'stream'
+
+  - job_name: kubernetes-pods
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: kubernetes-pods
+          __path__: /var/log/pods/*/*/*.log
+    pipeline_stages:
+      - cri: {}
+      - regex:
+          expression: '^/var/log/pods/(?P<namespace>[^_]+)_(?P<pod>(?P<app>[^-]+)[^_]*)_[^/]+/(?P<container>[^/]+)/.*\.log$'
+          source: filename
+      - labels:
+          namespace:
+          pod:
+          container:
+          app:
